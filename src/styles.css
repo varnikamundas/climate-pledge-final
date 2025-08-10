@@ -491,3 +491,45 @@ footer {
         font-size: 1.5rem;
     }
 }
+
+
+
+
+/* Add this to your CSS */
+@media (max-width: 600px) {
+    table {
+        border: 0;
+    }
+    table thead {
+        display: none;
+    }
+    table tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid #ddd;
+    }
+    table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid #eee;
+    }
+    table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 1rem;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

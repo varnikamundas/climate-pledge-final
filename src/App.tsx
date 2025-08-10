@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './styles.css';
 import html2canvas from 'html2canvas';
 
-type ProfileType = 'Student' | 'Working Professional'|'Workshops' | 'Other' ;
+type ProfileType = 'Student' | 'Working Professional' | 'Workshops' | 'Other';
 type CommitmentTheme = 'Energy' | 'Transportation' | 'Consumption';
 
 interface Pledge {
@@ -60,8 +60,8 @@ const App: React.FC = () => {
             },
             {
                 id: '5',
-                name: 'Neha Gupta',
-                email: 'neha@example.com',
+                name: 'Diya Gupta',
+                email: 'diya@example.com',
                 mobile: '7654321098',
                 state: 'Karnataka',
                 profileType: 'Other',
@@ -123,7 +123,11 @@ const App: React.FC = () => {
             date: new Date().toISOString().split('T')[0]
         };
 
-        setPledges(prev => [...prev, newPledge]);
+        // Update state and localStorage in one operation
+        const updatedPledges = [...pledges, newPledge];
+        setPledges(updatedPledges);
+        localStorage.setItem('climatePledges', JSON.stringify(updatedPledges));
+
         setSubmitted(true);
         setIsAnimating(true);
 
@@ -425,11 +429,11 @@ const App: React.FC = () => {
                         <tbody>
                         {pledges.map(pledge => (
                             <tr key={pledge.id}>
-                                <td>{pledge.name}</td>
-                                <td>{pledge.date}</td>
-                                <td>{pledge.state}</td>
-                                <td>{pledge.profileType}</td>
-                                <td>{'❤️'.repeat(pledge.commitments.length)}</td>
+                                <td data-label="Name">{pledge.name}</td>
+                                <td data-label="Date">{pledge.date}</td>
+                                <td data-label="State">{pledge.state}</td>
+                                <td data-label="Profile">{pledge.profileType}</td>
+                                <td data-label="Love for Planet">{'❤️'.repeat(pledge.commitments.length)}</td>
                             </tr>
                         ))}
                         </tbody>
