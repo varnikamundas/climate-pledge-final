@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
+import html2canvas from 'html2canvas';
 
-type ProfileType = 'Student' | 'Working Professional' | 'Other';
+type ProfileType = 'Student' | 'Working Professional'|'Workshops' | 'Other' ;
 type CommitmentTheme = 'Energy' | 'Transportation' | 'Consumption';
 
 interface Pledge {
@@ -34,7 +35,41 @@ const commitmentOptions: Record<CommitmentTheme, string[]> = {
 };
 
 const App: React.FC = () => {
-    const [pledges, setPledges] = useState<Pledge[]>([]);
+    const [pledges, setPledges] = useState<Pledge[]>(() => {
+        const savedPledges = localStorage.getItem('climatePledges');
+        return savedPledges ? JSON.parse(savedPledges) : [
+            {
+                id: '1',
+                name: 'Janice Fernandes',
+                email: 'janice@example.com',
+                mobile: '1234567890',
+                state: 'Maharashtra',
+                profileType: 'Working Professional',
+                commitments: ['Energy', 'Transportation'],
+                date: '2023-05-15'
+            },
+            {
+                id: '4',
+                name: 'Amit Singh',
+                email: 'amit@example.com',
+                mobile: '8765432109',
+                state: 'Uttar Pradesh',
+                profileType: 'Student',
+                commitments: ['Transportation'],
+                date: '2023-05-18'
+            },
+            {
+                id: '5',
+                name: 'Neha Gupta',
+                email: 'neha@example.com',
+                mobile: '7654321098',
+                state: 'Karnataka',
+                profileType: 'Other',
+                commitments: ['Energy', 'Transportation', 'Consumption'],
+                date: '2023-05-19'
+            }
+        ];
+    });
     const [formData, setFormData] = useState<Omit<Pledge, 'id' | 'date'>>({
         name: '',
         email: '',
@@ -47,39 +82,18 @@ const App: React.FC = () => {
     const [selectedCommitments, setSelectedCommitments] = useState<Record<string, boolean>>({});
     const [targetPledges] = useState(1000000);
     const [progressPercentage, setProgressPercentage] = useState(0);
-
-    // Simulate loading pledges
-    useEffect(() => {
-        const mockPledges: Pledge[] = [
-            {
-                id: '1',
-                name: 'Janice',
-                email: 'janice@example.com',
-                mobile: '1234567890',
-                state: 'maharashtra',
-                profileType: 'Working Professional',
-                commitments: ['Energy', 'Transportation'],
-                date: '2023-05-15'
-            },
-            {
-                id: '2',
-                name: 'John Smith',
-                email: 'john@example.com',
-                mobile: '0987654321',
-                state: 'New Delhi',
-                profileType: 'Student',
-                commitments: ['Consumption'],
-                date: '2023-05-16'
-            }
-        ];
-        setPledges(mockPledges);
-    }, []);
+    const [isAnimating, setIsAnimating] = useState(false);
 
     // Update progress percentage
     useEffect(() => {
         const percentage = (pledges.length / targetPledges) * 100;
         setProgressPercentage(percentage > 100 ? 100 : percentage);
     }, [pledges, targetPledges]);
+
+    // Save pledges to localStorage
+    useEffect(() => {
+        localStorage.setItem('climatePledges', JSON.stringify(pledges));
+    }, [pledges]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -111,16 +125,21 @@ const App: React.FC = () => {
 
         setPledges(prev => [...prev, newPledge]);
         setSubmitted(true);
+        setIsAnimating(true);
 
-        setFormData(prev => ({
+        // Reset form
+        setFormData({
             name: '',
             email: '',
             mobile: '',
             state: '',
-            profileType: prev.profileType,
+            profileType: 'Student',
             commitments: []
-        }));
+        });
         setSelectedCommitments({});
+
+        // Stop animation after 2 seconds
+        setTimeout(() => setIsAnimating(false), 2000);
     };
 
     const countByProfileType = (type: ProfileType) => {
@@ -134,10 +153,55 @@ const App: React.FC = () => {
         }
     };
 
+    const downloadCertificate = () => {
+        const certificate = document.getElementById('certificate');
+        if (certificate) {
+            html2canvas(certificate).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `climate-pledge-${pledges[pledges.length - 1].name}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    };
+
+    const shareCertificate = async () => {
+        const certificate = document.getElementById('certificate');
+        if (certificate) {
+            try {
+                const canvas = await html2canvas(certificate);
+                const dataUrl = canvas.toDataURL('image/png');
+                const blob = await (await fetch(dataUrl)).blob();
+                const file = new File([blob], 'pledge.png', { type: blob.type });
+
+                if (navigator.share && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        title: 'My Climate Pledge',
+                        text: `I've taken the climate pledge! Join me in making a difference.`,
+                        files: [file]
+                    });
+                } else {
+                    // Fallback for browsers that don't support sharing files
+                    const link = document.createElement('a');
+                    link.href = dataUrl;
+                    link.download = `climate-pledge-${pledges[pledges.length - 1].name}.png`;
+                    link.click();
+                }
+            } catch (err) {
+                console.error('Error sharing:', err);
+                downloadCertificate(); // Fallback to download
+            }
+        }
+    };
+
     return (
         <div className="app">
-            {/* Hero Section */}
+            {/* Hero Section with Animated Windmill */}
             <section className="hero">
+                <div className="windmill">
+                    <div className="tower"></div>
+                    <div className="blades"></div>
+                </div>
                 <div className="hero-content">
                     <h1>Join the Climate Action Movement</h1>
                     <p>Your small actions create big change. Take the pledge today!</p>
@@ -168,7 +232,7 @@ const App: React.FC = () => {
                     </div>
                     <div className="kpi-card">
                         <h2>Workshops</h2>
-                        <p className="kpi-value">0</p>
+                        <p className="kpi-value">{countByProfileType('Workshops')}</p>
                     </div>
                 </div>
             </section>
@@ -185,7 +249,7 @@ const App: React.FC = () => {
                     </div>
                     <div className="progress-bar">
                         <div
-                            className="progress-fill"
+                            className={`progress-fill ${isAnimating ? 'animate' : ''}`}
                             style={{ width: `${progressPercentage}%` }}
                         ></div>
                     </div>
@@ -261,7 +325,7 @@ const App: React.FC = () => {
                         <div className="form-group">
                             <label>Profile Type</label>
                             <div className="radio-group">
-                                {(['Student', 'Working Professional', 'Other'] as ProfileType[]).map(type => (
+                                {(['Student', 'Working Professional','Workshops','Other'] as ProfileType[]).map(type => (
                                     <label key={type}>
                                         <input
                                             type="radio"
@@ -310,7 +374,7 @@ const App: React.FC = () => {
                     </form>
                 ) : (
                     <div className="certificate-section">
-                        <div className="certificate">
+                        <div id="certificate" className="certificate">
                             <h3>Certificate of Climate Commitment</h3>
                             <h4>Presented to</h4>
                             <h2>{pledges[pledges.length - 1].name}</h2>
@@ -323,27 +387,34 @@ const App: React.FC = () => {
                                 Pledged on: {new Date().toLocaleDateString()}
                             </p>
                         </div>
-                        <button
-                            className="cta-button"
-                            onClick={() => {
-                                setSubmitted(false);
-                                scrollTo('pledge-wall');
-                            }}
-                        >
-                            View Pledge Wall
-                        </button>
+                        <div className="certificate-actions">
+                            <button className="cta-button" onClick={downloadCertificate}>
+                                Download Certificate
+                            </button>
+                            <button className="cta-button share-button" onClick={shareCertificate}>
+                                Share Certificate
+                            </button>
+                            <button
+                                className="cta-button"
+                                onClick={() => {
+                                    setSubmitted(false);
+                                    scrollTo('pledge-wall');
+                                }}
+                            >
+                                View Pledge Wall
+                            </button>
+                        </div>
                     </div>
                 )}
             </section>
 
             {/* Public Pledge Wall */}
             <section id="pledge-wall" className="pledge-wall">
-                <h2>Our Climate Heroes</h2>
+                <h2>PLEDGE WALL</h2>
                 <div className="table-container">
                     <table>
                         <thead>
                         <tr>
-                            <th>Pledge ID</th>
                             <th>Name</th>
                             <th>Date</th>
                             <th>State</th>
@@ -354,7 +425,6 @@ const App: React.FC = () => {
                         <tbody>
                         {pledges.map(pledge => (
                             <tr key={pledge.id}>
-                                <td>{pledge.id.slice(0, 8)}...</td>
                                 <td>{pledge.name}</td>
                                 <td>{pledge.date}</td>
                                 <td>{pledge.state}</td>

@@ -37,7 +37,7 @@ p {
     margin-bottom: 1rem;
 }
 
-/* Hero Section */
+/* Hero Section with Windmill Animation */
 .hero {
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url('https://images.unsplash.com/photo-1466611653911-95081537e5b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
@@ -47,11 +47,15 @@ p {
     text-align: center;
     padding: 5rem 1rem;
     margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
 }
 
 .hero-content {
     max-width: 800px;
     margin: 0 auto;
+    position: relative;
+    z-index: 2;
 }
 
 .hero h1 {
@@ -64,6 +68,67 @@ p {
     font-size: 1.2rem;
     margin-bottom: 2rem;
     color: white;
+}
+
+/* Windmill Animation */
+.windmill {
+    position: absolute;
+    right: 50px;
+    bottom: 50px;
+    width: 100px;
+    height: 150px;
+    z-index: 1;
+}
+
+.tower {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 100px;
+    background-color: #8B4513;
+}
+
+.blades {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    transform: translateX(-50%);
+    animation: spin 5s linear infinite;
+}
+
+.blades::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 5px;
+    height: 80px;
+    background-color: #f5f5f5;
+    transform: translateX(-50%);
+}
+
+.blades::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 80px;
+    height: 5px;
+    background-color: #f5f5f5;
+    transform: translateY(-50%);
+}
+
+@keyframes spin {
+    from {
+        transform: translateX(-50%) rotate(0deg);
+    }
+    to {
+        transform: translateX(-50%) rotate(360deg);
+    }
 }
 
 /* KPIs */
@@ -119,10 +184,29 @@ p {
     overflow: hidden;
 }
 
+/* Add this after .progress-fill */
 .progress-fill {
     height: 100%;
     background-color: var(--primary-color);
     transition: width 0.5s ease-in-out;
+    min-width: 1%; /* <-- Ensures visibility for small values */
+}
+
+
+.progress-fill.animate {
+    animation: progressPulse 2s ease-out;
+}
+
+@keyframes progressPulse {
+    0% {
+        background-color: var(--primary-color);
+    }
+    50% {
+        background-color: var(--accent-color);
+    }
+    100% {
+        background-color: var(--primary-color);
+    }
 }
 
 /* Impact Statement */
@@ -229,10 +313,19 @@ p {
     transition: background-color 0.3s;
     display: inline-block;
     text-decoration: none;
+    margin: 0.5rem;
 }
 
 .cta-button:hover, .submit-button:hover {
     background-color: #1b5e20;
+}
+
+.share-button {
+    background-color: #1976d2;
+}
+
+.share-button:hover {
+    background-color: #1565c0;
 }
 
 /* Certificate */
@@ -272,30 +365,45 @@ p {
     color: #666;
 }
 
+.certificate-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
 /* Pledge Wall */
 .pledge-wall {
     margin: 3rem 0;
+    overflow-x: auto;
 }
 
 .table-container {
+    width: 100%;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
+    min-width: 600px;
 }
 
 th, td {
     padding: 0.75rem;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    white-space: nowrap;
 }
 
 th {
     background-color: var(--primary-color);
     color: white;
+    position: sticky;
+    top: 0;
 }
 
 tr:nth-child(even) {
@@ -328,6 +436,27 @@ footer {
     .commitments-container {
         grid-template-columns: 1fr;
     }
+
+    .windmill {
+        right: 20px;
+        bottom: 20px;
+        width: 80px;
+        height: 120px;
+    }
+
+    .table-container {
+        display: block;
+        width: 100%;
+    }
+
+    table {
+        min-width: 100%;
+    }
+
+    th, td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -342,5 +471,23 @@ footer {
     .radio-group {
         flex-direction: column;
         gap: 0.5rem;
+    }
+
+    .certificate-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .windmill {
+        display: none;
+    }
+
+    th, td {
+        padding: 0.4rem;
+        font-size: 0.85rem;
+    }
+
+    .hearts-rating {
+        font-size: 1.5rem;
     }
 }
