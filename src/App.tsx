@@ -60,7 +60,7 @@ const App: React.FC = () => {
 
     // Fetch pledges from backend
     useEffect(() => {
-        fetch('http://localhost:5000/pledges')
+        fetch('https://climate-pledge-final.onrender.com')
             .then(res => res.json())
             .then(data => setPledges(data))
             .catch(err => console.error('Error fetching pledges:', err));
@@ -100,7 +100,7 @@ const App: React.FC = () => {
         };
 
         // POST to backend
-        fetch('http://localhost:5000/pledges', {
+        fetch('https://climate-pledge-final.onrender.com', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newPledge)
