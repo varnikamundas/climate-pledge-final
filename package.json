@@ -1,7 +1,7 @@
 {
   "scripts": {
 "dev": "vite",
-"build": "vite build,tcs",
+"build": "vite build",
     "start": "node dist/index.js",
 "preview": "vite preview",
 "seed": "ts-node --esm server/seed.ts",
