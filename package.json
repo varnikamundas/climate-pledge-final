@@ -4,7 +4,8 @@
     "seed": "node dist/seed.js",
     "build:frontend": "tsc -p tsconfig.json",
     "build:backend": "tsc -p tsconfig.server.json",
-    "build": "npm run build:frontend && npm run build:backend"
+    "build": "tsc"
+
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.0",
