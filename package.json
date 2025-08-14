@@ -1,47 +1,22 @@
 {
   "scripts": {
-    "dev": "vite",
-    "build": "tsc",
     "start": "node dist/index.js",
-    "preview": "vite preview",
-    "seed": "ts-node --esm server/seed.ts",
-    "start-server": "ts-node --esm server/index.ts"
+    "seed": "node dist/seed.js",
+    "build:frontend": "tsc -p tsconfig.json",
+    "build:backend": "tsc -p tsconfig.server.json",
+    "build": "npm run build:frontend && npm run build:backend"
   },
   "dependencies": {
-    "axios": "^1.11.0",
-    "body-parser": "^2.2.0",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
-    "express": "^5.1.0",
-    "html2canvas": "^1.4.1",
-    "mongoose": "^8.17.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@vitejs/plugin-react": "^5.0.0",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.0"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.3",
-    "@types/node": "^24.2.1",
+    "@types/express": "^4.17.21",
+    "@types/html2canvas": "^0.5.35",
+    "@types/node": "^20.12.7",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
-    "@vitejs/plugin-react": "^5.0.0",
-    "nodemon": "^3.1.10",
-    "rollup": "^4.46.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.2",
-    "vite": "^7.1.2"
-  },
-  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
-  "main": "eslint.config.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/varnikamundas/climate-pledge-final.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/varnikamundas/climate-pledge-final/issues"
-  },
-  "homepage": "https://github.com/varnikamundas/climate-pledge-final#readme"
+    "typescript": "^5.4.0"
+  }
 }
