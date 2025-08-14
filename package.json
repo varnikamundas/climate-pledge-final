@@ -1,31 +1,47 @@
 {
-  "name": "climate-pledge-final",
-  "version": "1.0.0",
-  "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.0",
-    "framer-motion": "^10.18.0",
+"dev": "vite",
+"build": "vite build,tcs",
+    "start": "node dist/index.js",
+"preview": "vite preview",
+"seed": "ts-node --esm server/seed.ts",
+"start-server": "ts-node --esm server/index.ts"
+},
+
+"dependencies": {
+    "axios": "^1.11.0",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
     "html2canvas": "^1.4.1",
-    "lucide-react": "^0.297.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.2.0",
-    "react-icons": "^5.5.0",
-    "tailwind-variants": "^0.1.6",
-    "tailwindcss": "^3.4.0"
+    "mongoose": "^8.17.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/html2canvas": "^0.5.35",
-    "@types/react": "^19.1.9",
-    "@vitejs/plugin-react": "^4.1.0",
-    "mongodb": "^6.18.0",
-    "netlify-cli": "^23.1.3",
-    "typescript": "^5.2.0",
-    "vite": "^7.1.0"
-  }
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.2.1",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.2"
+  },
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/varnikamundas/climate-pledge-final.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/varnikamundas/climate-pledge-final/issues"
+  },
+  "homepage": "https://github.com/varnikamundas/climate-pledge-final#readme"
 }

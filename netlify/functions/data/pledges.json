@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Janice Fernandes",
+    "email": "janice@example.com",
+    "mobile": "1234567890",
+    "state": "Maharashtra",
+    "profileType": "Working Professional",
+    "commitments": ["Energy","Transportation"],
+    "date": "2023-05-15"
+  },
+  {
+    "name": "Amit Singh",
+    "email": "amit@example.com",
+    "mobile": "8765432109",
+    "state": "Uttar Pradesh",
+    "profileType": "Student",
+    "commitments": ["Transportation"],
+    "date": "2023-05-18"
+  },
+  {
+    "name": "Diya Gupta",
+    "email": "diya@example.com",
+    "mobile": "7654321098",
+    "state": "Karnataka",
+    "profileType": "Workshops",
+    "commitments": ["Energy","Transportation","Consumption"],
+    "date": "2023-05-19"
+  }
+]
